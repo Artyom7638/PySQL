@@ -17,4 +17,4 @@ py_sql.execute(""" INSERT INTO users (name, surname) VALUES(?, ?, ?, ?)""", vari
 py_sql.execute(""" VALUES(?, ?, ?)""", variables_list=[True, func(False, None), not a or b and not c])
 py_sql.execute(""" VALUES(?, ?)""", variables_list=[a == b, a < b >= c])
 py_sql.execute(""" VALUES(?, ?)""", variables_list=[a[3 + 2], b['a' + 'b']])
-py_sql.execute(""" VALUES(?[3 + func(None, a == b) + 'b'])""", variables_list=[a])
+py_sql.execute(""" VALUES(?)""", variables_list=[a[3 + func(None, a == b) + b]])

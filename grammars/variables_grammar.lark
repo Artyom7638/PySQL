@@ -17,8 +17,8 @@ logical_op.5: and_op | logical_op "or" and_op -> disjunction
 and_op.5: logical_atom | and_op "and" logical_atom -> conjunction
 logical_atom.5: atom | "True" -> true | "False" -> false | "None" -> none | "not" logical_atom -> negation
 
-!comparison_op.5: comparison_atom | comparison_op (">" | ">=" | "==" | "<=" | "<" | "!=") comparison_atom -> comparison  // если указать операторы в виде отдельного терминала COMP_OPERATOR, то более одной операции сравнения в строке не может быть, вторая уже считается eof почему-то
-comparison_atom.5: math | string_op
+!comparison_op.1: comparison_atom | comparison_op (">" | ">=" | "==" | "<=" | "<" | "!=") comparison_atom -> comparison  // если указать операторы в виде отдельного терминала COMP_OPERATOR, то более одной операции сравнения в строке не может быть, вторая уже считается eof почему-то
+comparison_atom.1: math | string_op
 
 atom.5: identifier | func
 

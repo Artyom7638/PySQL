@@ -17,4 +17,4 @@ py_sql = PySQL('py_sql', connection)
 """sql VALUES($ True, $ func(False, None), $not a or b and not c)"""
 """sql VALUES($ a == b, $ a < b >= c)"""
 """sql VALUES($ a[3 + 2], $ b['a' + 'b'])"""
-"""sql VALUES($ a[3 + func(None, a == b) + 'b'])"""
+"""sql VALUES($ a[3 + func(None, a == b) + b])"""

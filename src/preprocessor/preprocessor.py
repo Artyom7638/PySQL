@@ -37,10 +37,10 @@ def check_syntax(line, query_string):
                               "Comments, assignments etc. are not supported.")
 
 
-def process_query(query, py_sql_var_name, dbms):
+def process_query(query, py_sql_var_name, dbms, print_result):
     query = query[3:]  # убирает слово sql в начале строки
-    query, into_parse_dict = parse_intos(query)
-    query, expressions = parse_variables(query)
+    query, into_parse_dict = parse_intos(query, print_result)
+    query, expressions = parse_variables(query, print_result)
     resulting_line = ''
     if into_parse_dict:  # есть into_py/$into
         resulting_line += generate_identifiers_string(into_parse_dict['identifiers'])
@@ -64,7 +64,7 @@ def process_query(query, py_sql_var_name, dbms):
     return resulting_line
 
 
-def parse_intos(query):
+def parse_intos(query, print_result):
     into_matches = into_regex.finditer(query)
     intos = list(into_matches)
     if len(intos) > 1:
@@ -77,7 +77,8 @@ def parse_intos(query):
     try:
         tree = into_parser.parse(string_for_parsing)
         parse_dict = IntoTreeTransformer(visit_tokens=True).transform(tree)
-        # print(query, '\n', tree.pretty(), '\n', parse_dict, '\n\n')
+        if print_result:
+            print(query, '\n', tree.pretty(), '\n', parse_dict, '\n\n')
     except Exception as e:
         '''print(e)
         return "there was an exception while parsing this query", None'''
@@ -88,25 +89,26 @@ def parse_intos(query):
     return resulting_query, parse_dict
 
 
-def parse_variables(query):
+def parse_variables(query, print_result):
     expressions = []
     while True:
         variable = variables_regex.search(query)
         if not variable:
             break
-        query, expression = parse_variable(query, variable)
+        query, expression = parse_variable(query, variable, print_result)
         expressions.append(expression)
     return query, expressions
 
 
-def parse_variable(query, variable):
+def parse_variable(query, variable, print_result):
     start = variable.start()
     final_query = query[:start]
     string_for_parsing = query[start:]
     tree = variables_parser.parse(string_for_parsing)
     expression, eof = VariablesTreeTransformer(visit_tokens=True).transform(tree)
     final_query += '?' + eof
-    # print(query, '\n', tree.pretty(), '\n', expression, '\n\n')
+    if print_result:
+        print(query, '\n', tree.pretty(), '\n', expression, '\n\n')
     return final_query, expression
 
 

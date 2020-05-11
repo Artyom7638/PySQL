@@ -35,8 +35,8 @@ class PySQL:
         self.connection = connection  # подключение к БД, через которое будет идти запрос
         self.dbms = dbms  # СУБД, по идее ни на что не влияет, но в теории что-то может отличаться
 
-    def process_file(self, file_path):
-        io_utils.process_file(file_path, self.var_name, self.dbms)
+    def process_file(self, file_path, print_result):
+        io_utils.process_file(file_path, self.var_name, self.dbms, print_result)
 
     def _execute(self, query, variables_list):
         if variables_list:

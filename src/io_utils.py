@@ -7,7 +7,7 @@ from src.preprocessor import preprocessor
 Query = namedtuple('Query', 'query_string start end indent')
 
 
-def process_file(file_path, py_sql_var_name, dbms, save_as_copy=True):
+def process_file(file_path, py_sql_var_name, dbms, print_result, save_as_copy=True):
     queries = find_sql_queries(file_path)
     with open(file_path, 'r') as r:
         lines = r.readlines()
@@ -17,7 +17,7 @@ def process_file(file_path, py_sql_var_name, dbms, save_as_copy=True):
         for query in queries:
             while i < query.start - 1:  # т.к. номера строк начинаются с единицы
                 i = write_line(w, lines, i)
-            processed_query = preprocessor.process_query(query.query_string, py_sql_var_name, dbms)
+            processed_query = preprocessor.process_query(query.query_string, py_sql_var_name, dbms, print_result)
             w.write(query.indent + processed_query + '\n')
             i = query.end
         while i < len(lines):
